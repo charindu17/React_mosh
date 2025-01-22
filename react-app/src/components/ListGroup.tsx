@@ -58,11 +58,22 @@
 
 // export default ListGroup;
 
-import { Fragment } from "react";
-import { MouseEvent } from "react";
-function ListGroup() {
-  let items = ["new york", "san francisco", "tokyo", "london", "paris"];
-  let selectedIndex = 4;
+import { Fragment, useState } from "react";
+//import { MouseEvent } from "react";
+
+//inorder to pass the items and title as an input we can use interface (built in function of typescript) here
+interface Props {
+  items: string[];
+  heading: string;
+  //(item:string ) =>void
+  onSelectItem: (item: string) => void; //like onClick
+}
+function ListGroup({ items, heading, onSelectItem }: Props) {
+  // let items = ["new york", "san francisco", "tokyo", "london", "paris"];
+  // let selectedIndex = 0;
+  //using the state Hook we can tell react
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+
   // items = [];
 
   // event:Mouseevent is the type annotation of the event
@@ -71,14 +82,15 @@ function ListGroup() {
 
   return (
     <>
-      <h1>List</h1>
+      {/* using props you can pass data into our componenents */}
+      <h1>{heading}</h1>
       {/* Cleaner conditional rendering */}
       {items.length === 0 && <p>No item found</p>}
       <ul className="list-group">
         {items.map((item, index) => (
           // Each item should have a uniquely identifying key property here
           <li
-            key={item}
+            //key={item}
             className={
               selectedIndex == index
                 ? "list-group-item active "
@@ -91,7 +103,8 @@ function ListGroup() {
             //onClick={(event) => console.log(event)}
             // onClick={handleClicked}
             onClick={() => {
-              selectedIndex = index;
+              setSelectedIndex(index);
+              onSelectItem(item);
             }}
           >
             {item}
